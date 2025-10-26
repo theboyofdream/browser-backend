@@ -6,12 +6,14 @@ import mime from "mime"
 import { formatFileSize, getUniqueFileName } from './utils'
 import { FileInfo } from './types'
 import { fileURLToPath } from "url";
+import { serve } from 'bun'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const ALLOWED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000']
 const BUCKET_PATH = path.join(__dirname, "../bucket")
+const PORT = 8000
 
 const app = new Hono()
 
@@ -135,4 +137,8 @@ app.get("/downloads/:filename", async (c) => {
 })
 
 
-export default app
+// export default app
+serve({
+    fetch: app.fetch,
+    port: PORT
+})
